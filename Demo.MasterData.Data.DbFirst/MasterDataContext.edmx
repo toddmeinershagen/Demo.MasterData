@@ -1,0 +1,188 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Demo.MasterData.Data.DbFirst.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="DemoMasterDataDataDbFirstStoreContainer">
+          <EntitySet Name="Episodes" EntityType="Demo.MasterData.Data.DbFirst.Store.Episodes" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Patients" EntityType="Demo.MasterData.Data.DbFirst.Store.Patients" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Visits" EntityType="Demo.MasterData.Data.DbFirst.Store.Visits" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_dbo_Episodes_dbo_Patients_Patient_Id" Association="Demo.MasterData.Data.DbFirst.Store.FK_dbo_Episodes_dbo_Patients_Patient_Id">
+            <End Role="Patients" EntitySet="Patients" />
+            <End Role="Episodes" EntitySet="Episodes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Visits_dbo_Episodes_Episode_Id" Association="Demo.MasterData.Data.DbFirst.Store.FK_dbo_Visits_dbo_Episodes_Episode_Id">
+            <End Role="Episodes" EntitySet="Episodes" />
+            <End Role="Visits" EntitySet="Visits" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Episodes">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Patient_Id" Type="int" />
+        </EntityType>
+        <EntityType Name="Patients">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="nvarchar(max)" />
+          <Property Name="LastName" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Visits">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Episode_Id" Type="int" />
+        </EntityType>
+        <Association Name="FK_dbo_Episodes_dbo_Patients_Patient_Id">
+          <End Role="Patients" Type="Demo.MasterData.Data.DbFirst.Store.Patients" Multiplicity="0..1" />
+          <End Role="Episodes" Type="Demo.MasterData.Data.DbFirst.Store.Episodes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patients">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Episodes">
+              <PropertyRef Name="Patient_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Visits_dbo_Episodes_Episode_Id">
+          <End Role="Episodes" Type="Demo.MasterData.Data.DbFirst.Store.Episodes" Multiplicity="0..1" />
+          <End Role="Visits" Type="Demo.MasterData.Data.DbFirst.Store.Visits" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Episodes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Visits">
+              <PropertyRef Name="Episode_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Demo.MasterData.Data.DbFirst" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="MasterDataContext" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Episodes" EntityType="Demo.MasterData.Data.DbFirst.Episode" />
+          <EntitySet Name="Patients" EntityType="Demo.MasterData.Data.DbFirst.Patient" />
+          <EntitySet Name="Visits" EntityType="Demo.MasterData.Data.DbFirst.Visit" />
+          <AssociationSet Name="FK_dbo_Episodes_dbo_Patients_Patient_Id" Association="Demo.MasterData.Data.DbFirst.FK_dbo_Episodes_dbo_Patients_Patient_Id">
+            <End Role="Patients" EntitySet="Patients" />
+            <End Role="Episodes" EntitySet="Episodes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Visits_dbo_Episodes_Episode_Id" Association="Demo.MasterData.Data.DbFirst.FK_dbo_Visits_dbo_Episodes_Episode_Id">
+            <End Role="Episodes" EntitySet="Episodes" />
+            <End Role="Visits" EntitySet="Visits" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Episode">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Patient_Id" Type="Int32" />
+          <NavigationProperty Name="Patient" Relationship="Demo.MasterData.Data.DbFirst.FK_dbo_Episodes_dbo_Patients_Patient_Id" FromRole="Episodes" ToRole="Patients" />
+          <NavigationProperty Name="Visits" Relationship="Demo.MasterData.Data.DbFirst.FK_dbo_Visits_dbo_Episodes_Episode_Id" FromRole="Episodes" ToRole="Visits" />
+        </EntityType>
+        <EntityType Name="Patient">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="LastName" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Episodes" Relationship="Demo.MasterData.Data.DbFirst.FK_dbo_Episodes_dbo_Patients_Patient_Id" FromRole="Patients" ToRole="Episodes" />
+        </EntityType>
+        <EntityType Name="Visit">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Episode_Id" Type="Int32" />
+          <NavigationProperty Name="Episode" Relationship="Demo.MasterData.Data.DbFirst.FK_dbo_Visits_dbo_Episodes_Episode_Id" FromRole="Visits" ToRole="Episodes" />
+        </EntityType>
+        <Association Name="FK_dbo_Episodes_dbo_Patients_Patient_Id">
+          <End Role="Patients" Type="Demo.MasterData.Data.DbFirst.Patient" Multiplicity="0..1" />
+          <End Role="Episodes" Type="Demo.MasterData.Data.DbFirst.Episode" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patients">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Episodes">
+              <PropertyRef Name="Patient_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Visits_dbo_Episodes_Episode_Id">
+          <End Role="Episodes" Type="Demo.MasterData.Data.DbFirst.Episode" Multiplicity="0..1" />
+          <End Role="Visits" Type="Demo.MasterData.Data.DbFirst.Visit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Episodes">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Visits">
+              <PropertyRef Name="Episode_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DemoMasterDataDataDbFirstStoreContainer" CdmEntityContainer="MasterDataContext">
+          <EntitySetMapping Name="Episodes">
+            <EntityTypeMapping TypeName="Demo.MasterData.Data.DbFirst.Episode">
+              <MappingFragment StoreEntitySet="Episodes">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Patient_Id" ColumnName="Patient_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Patients">
+            <EntityTypeMapping TypeName="Demo.MasterData.Data.DbFirst.Patient">
+              <MappingFragment StoreEntitySet="Patients">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Visits">
+            <EntityTypeMapping TypeName="Demo.MasterData.Data.DbFirst.Visit">
+              <MappingFragment StoreEntitySet="Visits">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Episode_Id" ColumnName="Episode_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
