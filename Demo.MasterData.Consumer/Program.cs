@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Data.Services.Client;
 using System.Linq;
+using Demo.MasterData.Consumer.Demo.MasterData.Services;
 
 namespace Demo.MasterData.Consumer
 {
@@ -17,13 +19,16 @@ namespace Demo.MasterData.Consumer
         public void Execute()
         {
             var uri = new Uri("http://localhost:63458/MasterDataService.svc");
-            var context = new Demo.MasterData.Services.MasterDataContext(uri);
+            var context = new MasterDataContext(uri);
 
-            var patients = from patient in context.Patients
+            var patients = (from patient in context.Patients.IncludeTotalCount()
                            where patient.Id > 2
-                           select patient;
+                           select patient) as DataServiceQuery<Patient>;
 
-            foreach (var patient in patients)
+            var result = patients.Execute() as QueryOperationResponse<Patient>;
+            Console.WriteLine("There were {0} total patients.", result.TotalCount);
+
+            foreach (var patient in result)
             {
                 Console.WriteLine("{0}, {1}", patient.LastName, patient.FirstName);
             }

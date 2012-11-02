@@ -38,6 +38,8 @@ http://localhost:63458/MasterDataService.svc/Patients with post and {"FirstName"
 http://localhost:63458/MasterDataService.svc/Patients with post and {"FirstName":"Jeff","LastName":"Brown"} [201 created with a return of the entity]
 http://localhost:63458/MasterDataService.svc/Patients(1)/Episodes - pulls back the Episodes for Patient with Id 1
 
+http://localhost:63458/MasterDataService.svc/GetPatientsWithLastNameStartingWith?prefix='M' - example of service operation
+
 
 --SQL for Data Set Up--
 /*
